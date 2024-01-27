@@ -1,28 +1,10 @@
 push 15
 push 6
 push 15
-jmp haha
-push 8
-out
-haha:
-push 5678
-pop bx
+sub
 pop ax
-in
-div
-rpush bx
 out
 
-zaza:
 
-
-push [rax]
-push [5]
-pop
-
-pop 5
-pop [5]
-
-push [rax + 5]
-pop [rax + 5]
+hlt
 

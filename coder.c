@@ -2,6 +2,16 @@
 
 //------------------------------------------------------------
 
+/*static const int MAX_CMD_NUM = 23;
+
+char* command_array[MAX_CMD_NUM] = {"push", "out", "pop", "in", \
+                        "hlt", "mul", "add", "sub", \
+                        "div", "jmp", "jb", "jbe", \
+                        "ja", "jae", "je", "jne", \
+                        }*/
+
+//------------------------------------------------------------
+
 ELEM assembler_encoding(char* command)
 {
     if (string_cmptor(command, "push"))

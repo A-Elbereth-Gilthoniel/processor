@@ -101,7 +101,8 @@ void StackRealloc(STACK *st, const int size);
 char* StackVerification(STACK *st);
 void assembler_reading(COMMAND_LIST *commands);
 size_t find_file_size(FILE* fp);
-int fill_massive_of_code(COMMAND_LIST *commands, size_t number_of_symbols, char* from);
+/*int fill_massive_of_code(COMMAND_LIST *commands, size_t number_of_symbols, char* from);*/
+int fill_massive_of_code(COMMAND_LIST *commands, size_t number_lines, char* from);
 int only_numeric_symbols(char* buffer, size_t size_buffer);
 int cmp_with_number(ELEM number1, ELEM number2);
 ELEM assembler_encoding(char* command);
@@ -112,6 +113,9 @@ void disassembler(ELEM* massive_of_code, size_t size);
 void do_pop(STACK *stk, ELEM data, ELEM* ax, ELEM* bx, ELEM* cx, ELEM* dx);
 void do_jump(COMMAND_LIST *commands, int *cur_ind);
 void put_into_file(ELEM* massive_of_code, size_t size);
+int find_number_lines(char* string);
+char* r_replace(char *orig, int size);
+char* n_replace(char *orig, int size);
 #ifdef DUMP
 void StackDump(STACK *st, const char* file, const char* func);
 #endif

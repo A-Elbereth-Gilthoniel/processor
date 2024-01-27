@@ -12,12 +12,15 @@ void assembler_reading(COMMAND_LIST *commands)
 
     char *text_from_file = (char*)calloc(number_of_symbols + 1, sizeof(char));
     fread(text_from_file, sizeof(char), number_of_symbols, fp);
+    int number_lines = find_number_lines(text_from_file);
+    text_from_file = r_replace(text_from_file, number_of_symbols);
+    text_from_file = n_replace(text_from_file, number_of_symbols);
 
-    commands->tag_massive = (ELEM*) calloc(number_of_symbols, sizeof(ELEM));
-    commands->tag_indexs = (int*) calloc(number_of_symbols, sizeof(int));
+    commands->tag_massive = (ELEM*) calloc(number_lines * 2, sizeof(ELEM));
+    commands->tag_indexs = (int*) calloc(number_lines * 2, sizeof(int));
     commands->massive_of_code = (ELEM*) calloc(number_of_symbols, sizeof(ELEM));
 
-    commands->size = fill_massive_of_code(commands, number_of_symbols, text_from_file);
+    commands->size = fill_massive_of_code(commands, number_lines, text_from_file);
 
     commands->massive_of_code = (ELEM*) realloc(commands->massive_of_code, (commands->size + 1) * sizeof(ELEM));
     commands->tag_massive = (ELEM*) realloc(commands->tag_massive, (commands->tag_number + 1) * sizeof(ELEM));
@@ -30,7 +33,7 @@ void assembler_reading(COMMAND_LIST *commands)
 
 //-------------------------------------------------------------------------------
 
-int fill_massive_of_code(COMMAND_LIST *commands, size_t number_of_symbols, char* from)
+/*int fill_massive_of_code(COMMAND_LIST *commands, size_t number_of_symbols, char* from)
 {
     size_t true_size = 0;
     char middle_buffer[100] = {};
@@ -149,4 +152,39 @@ int fill_massive_of_code(COMMAND_LIST *commands, size_t number_of_symbols, char*
     free(tag_names);
 
     return true_size;
+}*/
+
+//---------------------------------------------------------------
+
+int fill_massive_of_code(COMMAND_LIST *commands, size_t number_lines, char* from)
+{
+    int current_index = 0;
+    char* new_line_pos = 0;
+    int length = 0;
+    fprintf(stdout, "%s\n", from);
+
+    while (new_line_pos = strchr(from, ' '))
+    {
+        length = new_line_pos - from + 1;
+        char* middle_buffer = (char*)calloc(length, sizeof(char));
+        strncpy(middle_buffer, from, length - 1);
+
+        if (only_numeric_symbols(middle_buffer, length - 1))
+        {
+            ELEM value = 0;
+            sscanf(middle_buffer, SPEC, &value);
+            commands->massive_of_code[current_index] = value;
+        }
+        else
+        {
+            commands->massive_of_code[current_index] = assembler_encoding(middle_buffer);
+        }
+
+        current_index++;
+        from = from + length;
+    }
+
+    return current_index;
 }
+
+
