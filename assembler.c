@@ -1,8 +1,157 @@
-#include "processor.h"
+#include "assembler.h"
+
+//---------------------------------------------------------------------
+
+int main()
+{
+    char decode_file_name[100] = "decode.txt";
+    size_t symbols_num = 0;
+
+    char *text_from_file = read_file(decode_file_name, &symbols_num);
+
+    int number_lines = find_number_lines(text_from_file);
+    text_from_file = r_replace(text_from_file, symbols_num);   // For Windows
+    text_from_file = n_replace(text_from_file, symbols_num);
+
+    int tag_number = 0;
+
+    ELEM* tag_massive = (ELEM*) calloc(number_lines * 2, sizeof(ELEM));
+    int* tag_indexs = (int*) calloc(number_lines * 2, sizeof(int));
+    ELEM* massive_of_code = (ELEM*) calloc(symbols_num, sizeof(ELEM));
+
+    int size = fill_massive_of_code(massive_of_code, tag_indexs, \
+                                    tag_massive, &tag_number, number_lines, \
+                                    text_from_file);
+
+
+    char name_file[100]     = "code.txt";
+    char name_bin_file[100] = "code.bin";
+
+    fill_file(name_file, massive_of_code, size);
+    fill_bin_file(name_bin_file, &size, &tag_number, tag_indexs, massive_of_code);
+
+    free(tag_massive);
+    free(tag_indexs);
+    free(massive_of_code);
+}
+
+//---------------------------------------------------------------
+
+int fill_massive_of_code(ELEM* massive_of_code, int* tag_indexs, ELEM* tag_massive, int* tag_number, size_t number_lines, char* from)
+{
+    printf("%d\n", *tag_number);
+    int current_index = 0;
+    char* new_line_pos = 0;
+    int length = 0;
+    int tag_is_next = 0;
+   // fprintf(stdout, "%s\n", from);
+    char** tag_names = (char**)calloc(number_lines, sizeof(char*));
+
+    while (new_line_pos = strchr(from, ' '))
+    {
+        length = new_line_pos - from + 1;
+        char* middle_buffer = (char*)calloc(length, sizeof(char));
+        strncpy(middle_buffer, from, length - 1);
+       // if (string_cmptor(middle_buffer, ""))
+        //    continue;
+
+
+
+
+        if (tag_is_next == 1)
+        {
+            int tag_already_exist = 0;
+            for (int j = 0; j < *tag_number; j++)
+            {
+                if (string_cmptor(tag_names[j], middle_buffer) == 1)
+                {
+                    massive_of_code[current_index] = (ELEM)(1000 + j);
+                    tag_already_exist = 1;
+                    break;
+                }
+            }
+            if (tag_already_exist == 0)
+            {
+                tag_massive[*tag_number] = (ELEM)(1000 + *tag_number);
+                //printf("\n%d\n",current_tag_code);
+                tag_names[*tag_number] = (char*)calloc(strlen(middle_buffer) + 1, sizeof(char));
+                strncpy(tag_names[*tag_number], middle_buffer, strlen(middle_buffer));
+                massive_of_code[current_index] = (ELEM)(1000 + *tag_number);
+                (*tag_number)++;
+            }
+            tag_is_next = 0;
+        }
+
+
+
+
+        else if (only_numeric_symbols(middle_buffer, length - 1))
+        {
+            ELEM value = 0;
+            sscanf(middle_buffer, SPEC, &value);
+            massive_of_code[current_index] = value;
+        }
+
+
+        else if (middle_buffer[strlen(middle_buffer) - 1] == ':')
+        {
+                int tag_already_exist = 0;
+                middle_buffer[strlen(middle_buffer) - 1] = '\0';
+               // fprintf(stdout, "%s", middle_buffer);
+                for (int j = 0; j < *tag_number; j++)
+                {
+                    if (string_cmptor(tag_names[j], middle_buffer) == 1)
+                    {
+                        fprintf(stdout, "%s %d\n", tag_names[j], j);
+                        massive_of_code[current_index] = (ELEM)(1000 + j);
+                        tag_indexs[j] = current_index;
+                        tag_already_exist = 1;
+                        break;
+                    }
+                }
+                if (tag_already_exist == 0)
+                {
+                    tag_massive[*tag_number] = (ELEM)(1000 + *tag_number);
+                    tag_indexs[*tag_number] = current_index;
+                   // printf("\n%d\n",(ELEM)(1000 + *tag_number));
+
+                    tag_names[*tag_number] = (char*)calloc(1000 + *tag_number + 1, sizeof(char));
+                    strncpy(tag_names[*tag_number], middle_buffer, (ELEM)(1000 + *tag_number));
+
+                    massive_of_code[current_index] = (ELEM)(1000 + *tag_number);
+                    (*tag_number)++;
+                }
+        }
+
+
+
+
+        else
+        {
+
+            massive_of_code[current_index] = assembler_encoding(middle_buffer);
+
+            if (cmp_with_number(massive_of_code[current_index], (ELEM)CALL))
+            {
+                tag_is_next = 1;
+            }
+
+
+        }
+
+
+
+        current_index++;
+        from = from + length;
+    }
+
+
+    return current_index;
+}
 
 //-----------------------------------------------------------------------
 
-void assembler_reading(COMMAND_LIST *commands)
+/*void assembler_reading(COMMAND_LIST *commands)
 {
     char decode_file_name[100] = "decode.txt";
 
@@ -28,8 +177,14 @@ void assembler_reading(COMMAND_LIST *commands)
 
     put_into_file(commands->massive_of_code, commands->size);
 
+    FILE* output_file = fopen("code_bin.bin", "wb");
+
+    fwrite(commands->massive_of_code, sizeof(ELEM), commands->size, output_file);
+
+    fclose(output_file);
+
     fclose(fp);
-}
+}*/
 
 //-------------------------------------------------------------------------------
 
@@ -153,38 +308,3 @@ void assembler_reading(COMMAND_LIST *commands)
 
     return true_size;
 }*/
-
-//---------------------------------------------------------------
-
-int fill_massive_of_code(COMMAND_LIST *commands, size_t number_lines, char* from)
-{
-    int current_index = 0;
-    char* new_line_pos = 0;
-    int length = 0;
-    fprintf(stdout, "%s\n", from);
-
-    while (new_line_pos = strchr(from, ' '))
-    {
-        length = new_line_pos - from + 1;
-        char* middle_buffer = (char*)calloc(length, sizeof(char));
-        strncpy(middle_buffer, from, length - 1);
-
-        if (only_numeric_symbols(middle_buffer, length - 1))
-        {
-            ELEM value = 0;
-            sscanf(middle_buffer, SPEC, &value);
-            commands->massive_of_code[current_index] = value;
-        }
-        else
-        {
-            commands->massive_of_code[current_index] = assembler_encoding(middle_buffer);
-        }
-
-        current_index++;
-        from = from + length;
-    }
-
-    return current_index;
-}
-
-

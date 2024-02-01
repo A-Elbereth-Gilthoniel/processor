@@ -1,15 +1,22 @@
-TARGET = Project
+TARGET = proc
 
-SRC = $(wildcard *.c)
-OBJ = $(patsubst %.c, %.o, $(SRC))
+proc : processor.o checking.o stack.o commands.o bin-file.o
+	gcc processor.o checking.o stack.o commands.o bin-file.o -o proc
 
+processor.o : processor.c
+	gcc -c processor.c -o processor.o
 
-$(TARGET) : $(OBJ)
-	gcc $(OBJ) -o $(TARGET)
+checking.o : checking.c
+	gcc -c checking.c -o checking.o
 
-%.o : %.c
-	gcc -c $< -o $@
+stack.o : stack.c
+	gcc -c stack.c -o stack.o
 
+commands.o : commands.c
+	gcc -c commands.c -o commands.o
+
+bin-file.o : bin-file.c
+	gcc -c bin-file.c -o bin-file.o
 
 .PHONY : clean
 clean :

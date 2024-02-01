@@ -1,10 +1,18 @@
 push 15
 push 6
-push 15
-sub
-pop ax
 out
+push 15
 
+call exec
 
+sub
+out
 hlt
 
+
+exec:
+
+push 100
+mul
+out
+ret

@@ -135,8 +135,8 @@ char* StackVerification(STACK *st)
 {
     if (st == NULL)
         return "STACK_IS_UNDECLARED";
-    if (st->data == NULL)
-        return "STACK_IS_UNDECLARED";
+   /* if (st->data == NULL)
+        return "STACK_IS_UNDECLARED";*/
     if (st->size < 0)
         return "SIZE_LESS_THAN_ZERO";
     if (st->capacity < 0)
