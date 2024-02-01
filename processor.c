@@ -30,7 +30,6 @@ int main()
     STACK adress_stk = {};*/
     StackConstructor(&commands.data_stk, 50);
     StackConstructor(&commands.adress_stk, 50);
-
     do_commands(&commands);
    /* ELEM ax = (ELEM)0, bx = (ELEM)0, cx = (ELEM)0, dx = (ELEM)0;
     ELEM middle_number = 0, middle_number2 = 0;

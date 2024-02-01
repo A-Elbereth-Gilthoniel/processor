@@ -1,0 +1,31 @@
+        jmp main
+
+Fact:
+        push cx
+        push bx
+        mul
+        pop cx
+        push bx
+        push 1
+        add
+        pop bx
+        push bx
+        push ax
+        jae Contin
+        ret
+Contin:
+        call Fact
+        ret
+
+main:
+        in
+        pop ax
+        push 1
+        pop bx
+        push 1
+        pop cx
+        call Fact
+
+        push cx
+        out
+        hlt

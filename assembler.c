@@ -4,7 +4,8 @@
 
 int main()
 {
-    char decode_file_name[100] = "decode.txt";
+    char decode_file_name[100] = "";
+    scanf("%s", decode_file_name);
     size_t symbols_num = 0;
 
     char *text_from_file = read_file(decode_file_name, &symbols_num);
@@ -39,7 +40,7 @@ int main()
 
 int fill_massive_of_code(ELEM* massive_of_code, int* tag_indexs, ELEM* tag_massive, int* tag_number, size_t number_lines, char* from)
 {
-    printf("%d\n", *tag_number);
+   // printf("%d\n", *tag_number);
     int current_index = 0;
     char* new_line_pos = 0;
     int length = 0;
@@ -52,28 +53,17 @@ int fill_massive_of_code(ELEM* massive_of_code, int* tag_indexs, ELEM* tag_massi
         length = new_line_pos - from + 1;
         char* middle_buffer = (char*)calloc(length, sizeof(char));
         strncpy(middle_buffer, from, length - 1);
-       // if (string_cmptor(middle_buffer, ""))
-        //    continue;
-
-
-
 
         if (tag_is_next == 1)
         {
-            int tag_already_exist = 0;
-            for (int j = 0; j < *tag_number; j++)
-            {
-                if (string_cmptor(tag_names[j], middle_buffer) == 1)
-                {
-                    massive_of_code[current_index] = (ELEM)(1000 + j);
-                    tag_already_exist = 1;
-                    break;
-                }
-            }
-            if (tag_already_exist == 0)
+            int tag_ind = check_tag_existing(tag_names, middle_buffer, *tag_number);
+
+            if (tag_ind != -1)
+                    massive_of_code[current_index] = (ELEM)(1000 + tag_ind);
+
+            else
             {
                 tag_massive[*tag_number] = (ELEM)(1000 + *tag_number);
-                //printf("\n%d\n",current_tag_code);
                 tag_names[*tag_number] = (char*)calloc(strlen(middle_buffer) + 1, sizeof(char));
                 strncpy(tag_names[*tag_number], middle_buffer, strlen(middle_buffer));
                 massive_of_code[current_index] = (ELEM)(1000 + *tag_number);
@@ -95,32 +85,25 @@ int fill_massive_of_code(ELEM* massive_of_code, int* tag_indexs, ELEM* tag_massi
 
         else if (middle_buffer[strlen(middle_buffer) - 1] == ':')
         {
-                int tag_already_exist = 0;
-                middle_buffer[strlen(middle_buffer) - 1] = '\0';
-               // fprintf(stdout, "%s", middle_buffer);
-                for (int j = 0; j < *tag_number; j++)
-                {
-                    if (string_cmptor(tag_names[j], middle_buffer) == 1)
-                    {
-                        fprintf(stdout, "%s %d\n", tag_names[j], j);
-                        massive_of_code[current_index] = (ELEM)(1000 + j);
-                        tag_indexs[j] = current_index;
-                        tag_already_exist = 1;
-                        break;
-                    }
-                }
-                if (tag_already_exist == 0)
-                {
-                    tag_massive[*tag_number] = (ELEM)(1000 + *tag_number);
-                    tag_indexs[*tag_number] = current_index;
-                   // printf("\n%d\n",(ELEM)(1000 + *tag_number));
+            middle_buffer[strlen(middle_buffer) - 1] = '\0';
 
-                    tag_names[*tag_number] = (char*)calloc(1000 + *tag_number + 1, sizeof(char));
-                    strncpy(tag_names[*tag_number], middle_buffer, (ELEM)(1000 + *tag_number));
+            int tag_ind = check_tag_existing(tag_names, middle_buffer, *tag_number);
 
-                    massive_of_code[current_index] = (ELEM)(1000 + *tag_number);
-                    (*tag_number)++;
-                }
+            if (tag_ind != -1)
+            {
+                massive_of_code[current_index] = (ELEM)(1000 + tag_ind);
+                tag_indexs[tag_ind] = current_index;
+            }
+
+            else
+            {
+                tag_massive[*tag_number] = (ELEM)(1000 + *tag_number);
+                tag_indexs[*tag_number] = current_index;
+                tag_names[*tag_number] = (char*)calloc(1000 + *tag_number + 1, sizeof(char));
+                strncpy(tag_names[*tag_number], middle_buffer, (ELEM)(1000 + *tag_number));
+                massive_of_code[current_index] = (ELEM)(1000 + *tag_number);
+                (*tag_number)++;
+            }
         }
 
 
@@ -128,23 +111,29 @@ int fill_massive_of_code(ELEM* massive_of_code, int* tag_indexs, ELEM* tag_massi
 
         else
         {
-
             massive_of_code[current_index] = assembler_encoding(middle_buffer);
 
-            if (cmp_with_number(massive_of_code[current_index], (ELEM)CALL))
+            if (100 <= (int)massive_of_code[current_index] && (int)massive_of_code[current_index] <= (100 + REG_NUM) && (int)massive_of_code[current_index - 1] == PUSH)
+            {
+                massive_of_code[current_index - 1] = (ELEM)RPUSH;
+            }
+
+            if (cmp_with_number(massive_of_code[current_index], (ELEM)CALL) || ((int)massive_of_code[current_index] >= JMP && (int)massive_of_code[current_index] <= JNE))
             {
                 tag_is_next = 1;
             }
-
-
         }
-
-
-
         current_index++;
         from = from + length;
     }
 
+    /*printf("%d Labels:\n", *tag_number);
+    for (int i = 0; i < *tag_number; i++)
+        printf("%s, ", tag_names[i]);*/
+
+    for (int i = 0; i < (*tag_number); i++)
+        free(tag_names[i]);
+    free(tag_names);
 
     return current_index;
 }

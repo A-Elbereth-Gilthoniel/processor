@@ -25,3 +25,17 @@ int cmp_with_number(ELEM number1, ELEM number2)
 }
 
 //------------------------------------------------------------------------------
+
+int check_tag_existing(char** tag_names, char* middle_buffer, int tag_number)
+{
+    for (int j = 0; j < tag_number; j++)
+    {
+        if (string_cmptor(tag_names[j], middle_buffer) == 1)
+        {
+            return j;
+        }
+    }
+    return -1;
+}
+
+//-------------------------------------------------------------------

@@ -15,7 +15,13 @@ int string_cmptor(char* str1, char* str2)
     int i = 0;
     while (str1[i] != '\0' || str2[i] != '\0')
     {
-        if (str1[i] != str2[i])
+        char a = str1[i];
+        char b = str2[i];
+        if (str1[i] >= 'A' && str1[i] <= 'Z')
+            a = a + 32;
+        if (str2[i] >= 'A' && str2[i] <= 'Z')
+            b = b + 32;
+        if (a != b)
             return 0;
         i++;
     }

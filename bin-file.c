@@ -19,7 +19,7 @@ void work_with_bin_file(COMMAND_LIST* commands)
     for (int i = 0; i < commands->size; i++)
     {
         fread(&commands->massive_of_code[i], sizeof(ELEM), 1, file);
-        fprintf(stdout, "%lf\n", commands->massive_of_code[i]);
+       // fprintf(stdout, "%lf\n", commands->massive_of_code[i]);
     }
 
     fclose(file);

@@ -2,7 +2,7 @@
 
 //--------------------------------------------
 
-void do_pop(STACK *stk, ELEM data, ELEM* ax, ELEM* bx, ELEM* cx, ELEM* dx)
+/*void do_pop(STACK *stk, ELEM data, ELEM* ax, ELEM* bx, ELEM* cx, ELEM* dx)
 {
     ELEM number = StackPop(stk);
     switch ((int)data)
@@ -22,11 +22,11 @@ void do_pop(STACK *stk, ELEM data, ELEM* ax, ELEM* bx, ELEM* cx, ELEM* dx)
         default:
             assert(NULL);
     }
-}
+}*/
 
 //-------------------------------------------------------------
 
-void do_jump(COMMAND_LIST *commands, int *cur_ind)
+/*void do_jump(COMMAND_LIST *commands, int *cur_ind)
 {
     for (int i = 0; i < commands->tag_number; i++)
     {
@@ -37,20 +37,78 @@ void do_jump(COMMAND_LIST *commands, int *cur_ind)
             break;
         }
     }
-}
+}*/
 
 //-------------------------------------------------------------
 
+#define DEF_CMD(name, code, arg_num, program)\
+case code: \
+    program \
+    cur_ind = cur_ind + 1 + (arg_num); \
+    break;
+
+#define REGISTER(name, code) fprintf(stdout, #name" = "SPEC", ", registers[code - 100]);
+
 void do_commands(COMMAND_LIST *commands)
 {
-    ELEM ax = (ELEM)0, bx = (ELEM)0, cx = (ELEM)0, dx = (ELEM)0;
+    ELEM registers[REG_NUM] = {};
+    for (int i = 0; i < commands->tag_number; i++)
+        printf("%d  ", commands->tag_indexs[i]);
     ELEM middle_number = 0, middle_number2 = 0;
+    ELEM number = 0;
     int cur_ind = 0, tag_exist = 0;
     while (cur_ind < commands->size)
     {
+        /*if ((int)commands->massive_of_code[cur_ind] != SPACE)
+        {
+        printf("Current command: %d ", (int)commands->massive_of_code[cur_ind]);
+        #include "registers.h"
+        }*/
         switch ((int)commands->massive_of_code[cur_ind])
         {
-            case PUSH:
+            #include "commands.h"
+            default:
+                tag_exist = 0;
+                for (int i = 0; i < commands->tag_number; i++)
+                {
+                    if (1000 + i == (int)commands->massive_of_code[cur_ind])
+                    {
+                        tag_exist++;
+                        cur_ind++;
+                        tag_exist = 1;
+                        break;
+                    }
+                }
+                if (tag_exist == 0)
+                    new_assert("There is unknown tag");
+        }
+    }
+    fprintf(stdout, "Stack: ");
+    PrintStack(&commands->data_stk);
+#include "registers.h"
+}
+
+//---------------------------------------------------------------------
+
+#undef DEF_CMD
+#undef REGISTER
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+case PUSH:
                 StackPush(&commands->data_stk, commands->massive_of_code[cur_ind + 1]);
                 cur_ind += 2;
                 break;
@@ -187,25 +245,4 @@ void do_commands(COMMAND_LIST *commands)
             case SPACE:
               //  fprintf(stdout, "halava\n");
                 cur_ind++;
-                break;
-
-            default:
-                tag_exist = 0;
-                for (int i = 0; i < commands->tag_number; i++)
-                {
-                    if (1000 + i == (int)commands->massive_of_code[cur_ind])
-                    {
-                        tag_exist++;
-                        cur_ind++;
-                        tag_exist = 1;
-                        break;
-                    }
-                }
-                if (tag_exist == 0)
-                    new_assert("There is unknown tag");
-        }
-    }
-    fprintf(stdout, "Stack: ");
-    PrintStack(&commands->data_stk);
-    printf("a = "SPEC", b = "SPEC", c = "SPEC", d = "SPEC"\n", ax, bx);
-}
+                break;*/
