@@ -16,14 +16,10 @@ char* read_file(char* file_name, size_t* symbols_num);
 void fill_bin_file(char* name_bin, int* size, int* tag_num, int* tag_indexs, ELEM* code_array);
 int check_tag_existing(char** tag_names, char* middle_buffer, int tag_number);
 void make_tag(ELEM* tag_massive, int tag_number, char* middle_buffer, char** tag_names);
+void asm_verification(char* last_com, char* cur_com, ELEM value, int* is_ram);
+void tag_verification(char** tag_names, int* tag_indexs, int tag_number);
 
-enum ASM_ERRORS {
-    NO_ERRORS,
-    UNKNOWN_TAG,
-    WRONG_ARGUMENTS,
-    EMPTY_TAG_LINK,
 
-};
 
 
 #endif // ASSEMBLER_H

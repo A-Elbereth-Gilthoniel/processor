@@ -17,3 +17,5 @@
 #define IS_POP ((int)massive_of_code[current_index - 1] == POP)
 
 #define IS_PUSH ((int)massive_of_code[current_index - 1] == PUSH)
+
+#define IS_INSIGN_VALUE (string_cmptor(middle_buffer, "") == 1 || string_cmptor(middle_buffer, " ") == 1)

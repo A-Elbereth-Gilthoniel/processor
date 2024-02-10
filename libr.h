@@ -14,7 +14,7 @@ typedef double ELEM;
 #define REG_NUM 4
 
 #define new_assert(expr) \
-    fprintf(stderr, red(Error)": "%s"\n", expr);\
+    fprintf(stdout, red(Error)": %s\n", expr);\
     exit(1);
 
 #define stack_assert(expr) if (expr != "NO_ERRORS"){\
@@ -36,7 +36,7 @@ enum ASSEMBLER_REGISTERS {
 
 enum ASSEMBLER_COMMANDS {
     #include "commands.h"
-    END = -1
+    ERR = -1
 };
 
 #undef DEF_CMD

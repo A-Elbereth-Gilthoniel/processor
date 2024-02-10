@@ -1,4 +1,4 @@
-        jmp main
+jmp main
 
 Fact:
         push cx

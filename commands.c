@@ -6,6 +6,7 @@
 case code: \
     program \
     cur_ind = cur_ind + 1 + (arg_num); \
+    printf("code = %d\n", code);\
     break;
 
 #define REGISTER(name, code) fprintf(stdout, #name" = "SPEC", ", registers[code - 100]);

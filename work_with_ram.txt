@@ -1,7 +1,9 @@
 push 3
 push 8
+push 9
+pop ax
 pop [ax]
-push [ax]
+push [9]
 out
 pop bx
 push [0]
