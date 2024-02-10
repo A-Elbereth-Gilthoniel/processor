@@ -39,3 +39,10 @@ int check_tag_existing(char** tag_names, char* middle_buffer, int tag_number)
 }
 
 //-------------------------------------------------------------------
+
+/*void asm_verification(char* last_com, char* cur_com, int* is_ram)
+{
+    if ()
+}*/
+
+//-------------------------------------------------------------------------

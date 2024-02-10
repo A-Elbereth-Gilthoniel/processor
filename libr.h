@@ -13,20 +13,15 @@ typedef double ELEM;
 
 #define REG_NUM 4
 
-#define new_assert(expr) {\
-    fprintf(stderr, red(There is error) ": File: %s, Function: %s, Line: %d, Error :  \"%s\"\n", __FILE__, __func__, __LINE__, expr);\
-    exit(1);\
-}
+#define new_assert(expr) \
+    fprintf(stderr, red(Error)": "%s"\n", expr);\
+    exit(1);
 
 #define stack_assert(expr) if (expr != "NO_ERRORS"){\
     fprintf(stderr, red(There is error) ": File: %s, Function: %s, Line: %d, Error :  \"%s\"\n", __FILE__, __func__, __LINE__, expr);\
     exit(1);\
 }
 
-/*#define asmblr_assert(expr) if (expr != "NO_ERRORS){\
-
-
-}*/
 
 #define REGISTER(name, code) REG_##name = code,
 

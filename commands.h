@@ -137,6 +137,38 @@ DEF_CMD(RPUSH, 19, 1,
     }
 )
 
+DEF_CMD(RAM_NUM_POP, 20, 1,
+    number = StackPop(&commands->data_stk);
+    commands->ram[(int)commands->massive_of_code[cur_ind + 1]] = number;
+)
+
+DEF_CMD(RAM_REG_POP, 21, 1,
+    number = StackPop(&commands->data_stk);
+    for (int i = 0; i < REG_NUM; i++)
+    {
+        if ((int)commands->massive_of_code[cur_ind + 1] == (100 + i))
+        {
+            commands->ram[(int)registers[i]] = number;
+            break;
+        }
+    }
+)
+
+DEF_CMD(RAM_NUM_PUSH, 22, 1,
+    StackPush(&commands->data_stk, commands->ram[(int)commands->massive_of_code[cur_ind + 1]]);
+)
+
+DEF_CMD(RAM_REG_PUSH, 23, 1,
+    for (int i = 0; i < REG_NUM; i++)
+    {
+        if ((int)commands->massive_of_code[cur_ind + 1] == (100+i))
+        {
+            StackPush(&commands->data_stk, commands->ram[(int)registers[i]]);
+            break;
+        }
+    }
+)
+
 DEF_CMD(SPACE, 0, 0,
 
 )

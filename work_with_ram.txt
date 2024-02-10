@@ -1,0 +1,8 @@
+push 3
+push 8
+pop [ax]
+push [ax]
+out
+pop bx
+push [0]
+out

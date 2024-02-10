@@ -38,6 +38,7 @@ typedef struct stack {
 
 typedef struct list {
     ELEM* massive_of_code;
+    ELEM* ram;
     int size;
    // ELEM* tag_massive;
     int* tag_indexs;
@@ -61,6 +62,7 @@ void do_pop(STACK *stk, ELEM data, ELEM* ax, ELEM* bx, ELEM* cx, ELEM* dx);
 void do_jump(COMMAND_LIST *commands, int *cur_ind);
 void work_with_bin_file(COMMAND_LIST* commands);
 void do_commands(COMMAND_LIST *commands);
+void make_ram(COMMAND_LIST* commands);
 #ifdef DUMP
 void StackDump(STACK *st, const char* file, const char* func);
 #endif
