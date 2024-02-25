@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "processor.h": "c",
+        "commands.h": "c",
+        "libr.h": "c",
+        "registers.h": "c",
+        "asm_conditions.h": "c"
+    }
+}

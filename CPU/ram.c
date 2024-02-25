@@ -2,10 +2,10 @@
 
 //---------------------------------------------------------
 
-void make_ram(COMMAND_LIST* commands)
+void make_ram(cpu* handler)
 {
     int size = 100;
-    commands->ram = (ELEM*) calloc(size, sizeof(ELEM));
+    handler->ram = (ELEM*) calloc(size, sizeof(ELEM));
 }
 
 //--------------------------------------------------------

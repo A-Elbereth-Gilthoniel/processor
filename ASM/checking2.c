@@ -43,14 +43,14 @@ int check_tag_existing(char** tag_names, char* middle_buffer, int tag_number)
 //-------------------------------------------------------------------
 
 #define REGISTER(name, code) if (string_cmptor(cur_com, #name)) \
-{\
-no_ram_err = 1;\
-cur_cmd_is_reg = 1;\
+{                                                               \
+    no_ram_err = 1;                                             \
+    cur_cmd_is_reg = 1;                                         \
 }
 
 #define DEF_CMD(name, code, arg, ...) if ((int)last_cmd_code == code) \
-{\
-last_cmd_arg_num = arg; \
+{                                                                     \
+last_cmd_arg_num = arg;                                               \
 }
 
 void asm_verification(char* last_com, char* cur_com, ELEM cur_cmd_code, int* is_ram)
@@ -62,12 +62,11 @@ void asm_verification(char* last_com, char* cur_com, ELEM cur_cmd_code, int* is_
     int last_cmd_is_num = only_numeric_symbols(last_com, strlen(last_com));
 
     int no_ram_err = 0;
-#include "registers.h"
+#include "../general/registers.h"
 
     if ((int)last_cmd_code == ERR && last_cmd_is_num == 0 && (cur_cmd_is_num == 1 || cur_cmd_is_reg == 1))
     {
         fprintf(stderr, red(Error)": Instead of a command at the beginning, a number or a register: '%s'", cur_com);
-        exit(1);
     }
 
     if ((string_cmptor("push", last_com) || string_cmptor(last_com, "pop")) && *(is_ram) == 1)
@@ -78,23 +77,20 @@ void asm_verification(char* last_com, char* cur_com, ELEM cur_cmd_code, int* is_
         if (no_ram_err == 0)
         {
             fprintf(stderr, red(Error)": Undefined adress to RAM: %s [%s]", last_com, cur_com);
-            exit(1);
         }
     }
 
     if (cur_cmd_is_num == 0 && (int)cur_cmd_code == ERR)
     {
         fprintf(stderr, red(Error)": There is unknown tag in the code: %s", cur_com);
-        exit(1);
     }
 
     if (cur_cmd_is_num == 0 && last_cmd_is_num == 0 && cur_cmd_is_reg == 0)
     {
-#include "commands.h"
+#include "../general/commands.h"
         if (last_cmd_arg_num > 0)
         {
             fprintf(stderr, red(Error)": Not enough arguments for command '%s'", last_com);
-            exit(1);
         }
     }
 

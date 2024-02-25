@@ -1,0 +1,20 @@
+TARGET = proc
+
+PREF_SRC = ./CPU/
+PREF_OBJ = ./CPU/obj/
+DELF = .\CPU\obj\
+
+SRC = $(wildcard $(PREF_SRC)*.c)
+OBJ = $(patsubst $(PREF_SRC)%.c, $(PREF_OBJ)%.o, $(SRC))
+
+
+$(TARGET) : $(OBJ)
+	gcc $(OBJ) -o $(TARGET)
+
+$(PREF_OBJ)%.o : $(PREF_SRC)%.c
+	gcc -c $< -o $@
+
+
+.PHONY : clean
+clean :
+	del $(DELF) $(TARGET).exe -rf

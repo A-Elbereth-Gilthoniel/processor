@@ -15,13 +15,7 @@ int string_cmptor(char* str1, char* str2)
     int i = 0;
     while (str1[i] != '\0' || str2[i] != '\0')
     {
-        char a = str1[i];
-        char b = str2[i];
-        if (str1[i] >= 'A' && str1[i] <= 'Z')
-            a = a + 32;
-        if (str2[i] >= 'A' && str2[i] <= 'Z')
-            b = b + 32;
-        if (a != b)
+        if (toupper(str1[i]) != toupper(str2[i]))
             return 0;
         i++;
     }
@@ -51,8 +45,13 @@ int find_number_lines(char* string)
     int number_lines = 0;
     for (int i = 0; i < strlen(string); i++)
     {
-        if (string[i] == '\n')
+        if (string[i] == '\r')
+            string[i] = ' ';
+        else if (string[i] == '\n')
+        {
             number_lines++;
+            string[i] = ' ';
+        }
     }
     if (string[strlen(string) - 1] != '\n')
         number_lines++;
@@ -61,44 +60,3 @@ int find_number_lines(char* string)
 }
 
 //-----------------------------------------------------------
-
-char* r_replace(char *orig, int size)
-{
-    char* result;
-    char* new_str = result = (char*) calloc(size + 1, sizeof(char));
-    char* insert_point;
-    int n = 0;
-
-    while (insert_point = strstr(orig, "\r"))
-    {
-        n = insert_point - orig;
-        new_str = strncpy(new_str, orig, n) + n;
-        orig = orig + n + 1;
-    }
-
-    strcpy(new_str, orig);
-    return result;
-}
-
-//-----------------------------------------------------------
-
-char* n_replace(char *orig, int size)
-{
-    char* result;
-    char* new_str = result = (char*) calloc(size + 1, sizeof(char));
-    char* insert_point;
-    int n = 0;
-
-    while (insert_point = strstr(orig, "\n"))
-    {
-        n = insert_point - orig;
-        new_str = strncpy(new_str, orig, n) + n;
-        new_str = strcpy(new_str, " ") + 1;
-        orig = orig + n + 1;
-    }
-
-    strcpy(new_str, orig);
-    return result;
-}
-
-//-------------------------------------------------------------------

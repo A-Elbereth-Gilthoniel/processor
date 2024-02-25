@@ -14,9 +14,8 @@ if (string_cmptor(command, #name))\
 
 ELEM assembler_encoding(char* command)
 {
-   // fprintf(stdout, "new command: '%s'\n", command);
-#include "commands.h"
-#include "registers.h"
+#include "../general/commands.h"
+#include "../general/registers.h"
 
     return (ELEM)ERR;
 }

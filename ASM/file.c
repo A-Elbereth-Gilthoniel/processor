@@ -7,7 +7,6 @@ size_t find_file_size(FILE* fp)
     fseek(fp, 0, SEEK_END);
     size_t n = ftell(fp);
     fseek(fp, 0, SEEK_SET);
-    assert(n > 2 && "File is empty");
     return n;
 }
 
@@ -26,9 +25,13 @@ void fill_file(char* code_file_name, ELEM* massive_of_code, size_t size)
 
 //------------------------------------------------
 
+#define DIR_MAX_LEN 50
+
 char* read_file(char* file_name, size_t* symbols_num)
 {
-    FILE *fp = fopen(file_name, "rb");
+    char dirf[DIR_MAX_LEN] = "./tests/";
+    strncat (dirf, file_name, DIR_MAX_LEN);
+    FILE *fp = fopen(dirf, "rb");
     assert(fp && ("WTF?! Where's this file ''%s''!?", file_name));
 
     *(symbols_num) = find_file_size(fp);
@@ -41,11 +44,14 @@ char* read_file(char* file_name, size_t* symbols_num)
     return text_from_file;
 }
 
+
 //------------------------------------------------------------------
 
 void fill_bin_file(char* name_bin, int* size, int* tag_num, int* tag_indexs, ELEM* code_array)
 {
-    FILE* output_file = fopen(name_bin, "wb");
+    char dirf[DIR_MAX_LEN] = "./bin/";
+    strncat (dirf, name_bin, DIR_MAX_LEN);
+    FILE* output_file = fopen(dirf, "wb");
 
     fwrite(size, sizeof(ELEM), 1, output_file);
     fwrite(tag_num, sizeof(ELEM), 1, output_file);
@@ -58,3 +64,5 @@ void fill_bin_file(char* name_bin, int* size, int* tag_num, int* tag_indexs, ELE
     }
     fwrite(code_array, sizeof(ELEM), *size, output_file);
 }
+
+#undef DIR_MAX_LEN
