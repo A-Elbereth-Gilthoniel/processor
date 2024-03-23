@@ -47,7 +47,6 @@ ELEM StackPop(STACK* st)
 
     if (st->size < st->capacity / 3)
     {
-        fprintf(stdout, "%d\n", st->capacity / 3);
         StackRealloc(st, (st->capacity / 3)+1);
     }
 

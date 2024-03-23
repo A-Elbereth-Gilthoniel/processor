@@ -56,11 +56,9 @@ void fill_bin_file(char* name_bin, int* size, int* tag_num, int* tag_indexs, ELE
     fwrite(size, sizeof(ELEM), 1, output_file);
     fwrite(tag_num, sizeof(ELEM), 1, output_file);
 
-    fprintf(stdout, "indexs of tags: \n");
     for (int i = 0; i < *tag_num; i++)
     {
         fwrite(&tag_indexs[i], sizeof(ELEM), 1, output_file);
-        fprintf(stdout, "%d : %d\n", i, tag_indexs[i]);
     }
     fwrite(code_array, sizeof(ELEM), *size, output_file);
 }

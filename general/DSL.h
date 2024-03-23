@@ -11,8 +11,7 @@ if (condition)                                                      \
 for (int i = 0; i < handler->tag_number; i++)                      \
 {                                                                   \
     if (1000 + i == (int)handler->massive_of_code[cur_ind + 1])    \
-    {                                                               \
-        fprintf(stdout, "index!!!\n");                              \
+    {                                                              \
         cur_ind = handler->tag_indexs[i] + 1;                      \
         break;                                                      \
     }                                                               \

@@ -6,7 +6,6 @@
 case code:                                      \
     program                                     \
     cur_ind = cur_ind + 1 + (arg_num);          \
-    printf("code = %d\n", code);                \
     break;
 
 #define REGISTER(name, code) fprintf(stdout, #name" = "SPEC", ", registers[code - 100]);
@@ -41,15 +40,12 @@ void do_commands(cpu *handler)
                 }
                 if (tag_exist == 0)
                 {
-                    printf("this hui: %d\n", (int)handler->massive_of_code[cur_ind]);
                     new_assert("There is unknown tag");
 
                 }
         }
     }
-    fprintf(stdout, "Stack: ");
-    PrintStack(&handler->data_stk);
-#include "../general/registers.h"
+//#include "../general/registers.h"
 }
 
 //---------------------------------------------------------------------
